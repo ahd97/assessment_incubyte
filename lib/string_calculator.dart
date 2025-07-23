@@ -1,18 +1,17 @@
 int add(String input) {
-  final pattern = RegExp(r'^\s*\d+\s*(?:,\s*\d+\s*)*$');
+  final entries = input.split(RegExp(r'[,\s]+')).where((t) => t.isNotEmpty);
 
   // If the whole string doesn’t match that pattern, it’s invalid
-  if (!pattern.hasMatch(input)) {
-    throw FormatException(
-        'Input may contain only digits, commas, and whitespace,\n'
-        'and must not have leading/trailing commas or empty entries.');
+  final numbers = entries.map((t) {
+    if (!RegExp(r'^\d+$').hasMatch(t)) {
+      throw FormatException('Invalid number: "$t"');
+    }
+    return int.parse(t);
+  });
+  final list = numbers.toList();
+  if (list.isEmpty) {
+    throw FormatException('No numbers to sum.');
   }
-  try {
-    final numbers = input.split(',').map((e) => int.parse(e.trim())).toList();
-    final sum = numbers.reduce((a, b) => a + b);
-    return sum;
-  } catch (e) {
-    print('Invalid input. Please enter only integers separated by commas.');
-    return 0;
-  }
+
+  return list.reduce((a, b) => a + b);
 }
