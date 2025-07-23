@@ -32,4 +32,18 @@ void main() {
       expect(() => add(''), throwsFormatException);
     });
   });
+
+  group('sumCommaSeparatedNumbers — custom delimiter', () {
+    test('valid semicolon delimiter', () {
+      expect(add('//;\n1;2;3'), equals(6));
+    });
+
+    test('invalid delimiter containing letter', () {
+      expect(() => add('//a\n1a2'), throwsFormatException);
+    });
+
+    test('invalid delimiter containing digit', () {
+      expect(() => add('//1\n1 1'), throwsFormatException);
+    });
+  });
 }
